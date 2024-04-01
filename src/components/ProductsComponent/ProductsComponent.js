@@ -7,7 +7,7 @@ import { getProducts } from '../../Redux/Product/actions';
 import { addCartItem } from '../../Redux/Cart/cartSlice';
 import { Link } from 'react-router-dom';
 //variable destructuring of props
-const Products=({typeOfProducts,showProducts, changeMainComponentVariable,numberOfProducts})=>{
+const Products=({typeOfProducts,showProducts, changeMainComponentVariable,numberOfProducts, ascSort, descSort, ascPrice})=>{
 
       //local state , global state
 
@@ -57,6 +57,54 @@ const Products=({typeOfProducts,showProducts, changeMainComponentVariable,number
       {
       productDataNew.push(productData[i]);
       }
+    }
+
+    if(ascSort == 'asc') {
+      productDataNew.sort(function ( a, b ) {
+        if ( a.product_name < b.product_name ){
+          return -1;
+        }
+        if ( a.product_name > b.product_name ){
+          return 1;
+        }
+        return 0;
+      });
+    }
+
+    if(descSort == 'desc') {
+      productDataNew.sort(function ( a, b ) {
+        if ( a.product_name < b.product_name ){
+          return 1;
+        }
+        if ( a.product_name > b.product_name ){
+          return -1;
+        }
+        return 0;
+      });
+    }
+
+    if(ascPrice === 'asc') {
+      productDataNew.sort(function ( a, b ) {
+        if ( a.price < b.price ){
+          return -1;
+        }
+        if ( a.price > b.price ){
+          return 1;
+        }
+        return 0;
+      });
+    }
+
+    if(ascPrice === 'desc') {
+      productDataNew.sort(function ( a, b ) {
+        if ( a.price < b.price ){
+          return 1;
+        }
+        if ( a.price > b.price ){
+          return -1;
+        }
+        return 0;
+      });
     }
     
     return(
