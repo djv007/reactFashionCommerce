@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import React, { useState } from 'react'
+import CategoriesContext from './Context/CategoriesContext';
 
 // import the library
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -22,20 +24,67 @@ import Cart from './components/Cart';
 
 // import your icons
 function App() {
+
+  class ErrorBoundary extends React.Component {
+
+    //useState where state is for the class component's state
+    state = {
+      hasError: false,
+      error:"default error"
+    };
+  
+    //change the state over here
+    static getDerivedStateFromError(error) {
+      return {
+        hasError: true
+        
+      };
+    }
+  
+  
+    //do something with the error
+    componentDidCatch(error, info) {
+  
+      
+      this.state.error= error; 
+    
+      console.log("Error caused is:"+error, info);
+    }
+  
+  
+    //render conditionally based on the error
+    render() {
+      if (this.state.hasError) {
+        return <h1>An error has occurred:{this.state.error}.</h1>;
+        
+      }
+      //else
+      return this.props.children ;
+    }
+  }
+  
+
+  let [cartCount,setCartCount ] =useState(0);
   library.add(fab, fas, far)
-  return (
-    <div className="App">
-<TopNav />
+
+
+  
+  
+  return  (
+    <ErrorBoundary>
+    <div className='App'>
+<TopNav  />
 <CatNav />
 <Routes>
 <Route path="/cart" element={<Cart />} />
   
-  <Route path="/" element={<LandingPage />} />
+  <Route path="/" element={<LandingPage  />} />
   <Route path="/productdetails" element={<ProductDetails />} />
 </Routes>
-
-    </div>
+  </div>
+  </ErrorBoundary>
   );
+
 }
 
 export default App;

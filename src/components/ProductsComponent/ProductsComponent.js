@@ -6,32 +6,115 @@ import { useEffect } from 'react';
 import { getProducts } from '../../Redux/Product/actions';
 import { addCartItem } from '../../Redux/Cart/cartSlice';
 import { Link } from 'react-router-dom';
-const Products=()=>{
+import { addItemToProduct } from '../../Redux/Product/productSlice';
+//variable destructuring of props
+const Products=({typeOfProducts,showProducts, changeMainComponentVariable,numberOfProducts})=>{
+
+if(typeOfProducts)
+{
+   
+}
+if(showProducts)
+{
+
+}
+
+      //local state , global state
+
+    //local => variables within the component and the view  =>useState 
+
+    //global state=> Redux, global state management for memory management across
+     //multiple components, ContextAPI
+
+ //useState
+
+ //let [var1,setVar1]=useState(3);
+ //var1=3;
+
+ //react can track variable changes using useState mostly
 
     let productData= useSelector(state=>state.productReducer.products);
-    
+   // productData.push
+
+    console.log(JSON.stringify(productData)+"length is:"+productData.length +":"+productData[0]);
     let cartData=useSelector(state=>state.cartReducer)
-    console.log(cartData);
+    console.log("component created:"+showProducts+":"+numberOfProducts);
     let dispatch= useDispatch();
     useEffect(()=>{
 
-        console.log("use effect called");
-         dispatch(getProducts());
+      //entry point for products component
 
-    },[] )
+        console.log("use effect called:"+showProducts);
+         dispatch(getProducts());
+        
+        
+        
+         
+
+        
+         
+
+         return function()
+         {
+
+           console.log("clean up called for product components");
+           //clean all your unused data within the component
+
+           //javascript is gc (mark and sweep)
+
+                   };
+
+    }, [] )
 
     const addToCart= (product)=>{
 
+     // let productData={"id":10,"product_name":"Torn Tshirt","category_id":7,"product_img":"shop-9.jpg","price":115,"created_on":"2023-10-26 17:02:07"};
+    //  dispatch(addItemToProduct(productData));
+
 
       product={...product,quantity:1};
+
+       //  dispatch("cartSlice/addCartItem",{product});
         dispatch(addCartItem(product));
+        //will be sent to the reducers from the store 
     }
 
+
+    let productDataNew= [];
+    for(let i=0;i<numberOfProducts;i++)
+    {
+      if(productData[i])
+      {
+      productDataNew.push(productData[i]);
+      }
+    }
+
+    
+    
+      const itemsAddedArr = JSON.parse(sessionStorage.getItem("itemsAdded"));
+          if(itemsAddedArr && itemsAddedArr.length > 0) {
+           for(let i = 0 ; i < itemsAddedArr.length ; i++)
+           {
+            const existingProduct = productDataNew.find(product => product.id === itemsAddedArr[itemsAddedArr.length - 1].id);
+            if(!existingProduct) 
+            {
+              productDataNew.push(itemsAddedArr[i]);
+            }
+           }
+          }
+    
+    
+
+    
     
     return(
  
         <div className='product-container'>
-    {productData.map((eachProduct,index)=>{
+
+        <button onClick={()=>changeMainComponentVariable(40)}>Change main component variable</button>
+
+
+    {showProducts &&   productDataNew.map((eachProduct,index)=>{
 
             
 return(

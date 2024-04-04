@@ -3,14 +3,23 @@ import './_side-nav.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import accordionSlice from '../../Redux/Accordion/accordionSlice'
 import { getCategories } from '../../Redux/Category/actions'
-import { filterByPrice, filterProducts } from '../../Redux/Product/productSlice'
-const SideNav = () => {
+import { addItemToProduct, filterByPrice, filterProducts } from '../../Redux/Product/productSlice'
+import CategoriesContext from '../../Context/CategoriesContext'
+const SideNav = ({setNumberOfProducts,showProducts,setShowProducts}) => {
 
     let accordionData= useSelector(state=>state.categoryReducer.categories);
     let  fetchedProductData= useSelector(state=>state.productReducer)
     let [products,setProducts] = useState();
-    let [minPriceLimit,setMinPriceLimit]= useState(10);
+    let [stateVar,setStateVar] = useState();
+    
+     //categories,setCategories
+    let [minPriceLimit,setMinPriceLimit]= useState(50);
     let [maxPriceLimit,setMaxPriceLimit]= useState(130);
+  
+    //let [showProductProxy,setShowProductProxy] = useState(false);
+
+    let productData= useSelector(state=>state.productReducer.products);
+
     
     const dispatch= useDispatch();
 
@@ -37,11 +46,34 @@ const SideNav = () => {
         console.log(products);
     }
 
-  return (
-    <div className='side-nav'>
+    const addItemToProducts = () => {
+        const item = {"id":productData.length,"product_name":"Torn T shirt","category_id":7,"product_img":"shop-9.jpg","price":515,"created_on":"2023-10-26 17:02:07"}
+        dispatch(addItemToProduct(item));
 
+        let itemsAddedArr = JSON.parse(sessionStorage.getItem("itemsAdded"))?JSON.parse(sessionStorage.getItem("itemsAdded")):[];
+        itemsAddedArr.push(item);
+        sessionStorage.setItem("itemsAdded", JSON.stringify(itemsAddedArr));
+    }
+
+
+
+  return (
+
+   
+   
+    
+   
+
+    <div className='side-nav'>
+    
+   
         <div className='section-title'>
             <h3>Category</h3>
+            <p>{stateVar}</p>
+            <p>Set number of products: <input type="number" onChange={(e)=>setNumberOfProducts(e.target.value)} />    </p>
+            <button onClick={()=>{setShowProducts(!showProducts)}}> Click to show or hide products</button>
+            <button onClick={() => addItemToProducts()}>Add items to product page</button>
+            <button onClick={()=>{setStateVar(20)}}>Click me</button>
         </div>
 
 
@@ -114,6 +146,7 @@ if(eachData.parent_category_id==null)
          </div>
          <div>
             <label> Min: {minPriceLimit} </label>
+
             <input type="range"
             className='form-range'
             onChange={(e)=>{setMinPriceLimit(e.target.value)}}
@@ -142,8 +175,16 @@ if(eachData.parent_category_id==null)
 
          </div>
 
+ 
                </div>
+               {value => <p> The watches are  { value } </p>}
+ 
+
+           
+            
     </div>
+   
+    
   )
 }
 
